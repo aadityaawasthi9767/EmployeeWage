@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+declare -a arrDailyWage;
+
 IS_PART_TIME=1
 IS_FULL_TIME=2
 EMP_RATE_PER_HRS=20
@@ -8,6 +10,8 @@ NUM_WORKING_DAYS=20
 
 totalEmpHrs=0
 totalWorkingDays=0
+counter=0;
+sum=0;
 
 
 function getWorkHrs()
@@ -25,8 +29,15 @@ do
         ((totalWorkingDays++))
         empCheck=$((RANDOM%3))
         empHrs="$( getWorkHrs $empCheck )"
-        totalEmpHrs=$(($totalEmpHrs+$empHrs))
+        totalEmpHrs=$(($totalEmpHrs+$empHrs));
+        DailyWage=$(( $totalEmpHrs * $EMP_RATE_PER_HRS ));
+        arrDailyWage[ ((counter++)) ]=$DailyWage;
 done
+echo "DailyWages: "${arrDailyWage[@]};
+echo "Lenght" ${#arrDailyWage[@]};
 
-        salary=$(( $totalEmpHrs * $EMP_RATE_PER_HRS ))
-        
+for(( i=0 ; i<=${#arrDailyWage[@]} ; i++ ))
+do
+	sum=$((sum+arrDailyWage[i]));
+done
+echo "Salary: "$sum;
